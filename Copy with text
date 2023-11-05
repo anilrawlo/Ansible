@@ -1,0 +1,40 @@
+
+
+
+---
+- name: Copy files from /tmp/anil to multiple destination paths with backups and rollback
+  hosts: localhost  # You can specify your target hosts here
+  become: yes  # If you need elevated privileges for copying files
+
+  tasks:
+    - name: Read file entries from the text file
+      command: cat file_entries.txt
+      register: file_entries_content
+      changed_when: false
+
+    - name: Split and create a list of file entries
+      set_fact:
+        file_entries_list: "{{ file_entries_content.stdout_lines | map('regex_replace', '^(.*?),(.*?),(.*?)$', '\\1,\\2,\\3') | list }}"
+      changed_when: false
+
+    - name: Take a backup of existing files
+      copy:
+        src: "{{ item.1 }}"
+        dest: "/tmp/QC{{ qc_number }}/{{ item.0 | basename }}.bak"
+      with_items: "{{ file_entries_list }}"
+      when: ansible.builtin.stat(path=item.1).exists
+
+    - name: Copy new files from /tmp/anil to destinations
+      copy:
+        src: "/tmp/anil/{{ item.0 }}"
+        dest: "{{ item.1 }}"
+        mode: "{{ item.2 }}"
+      with_items: "{{ file_entries_list }}"
+
+    - name: Rollback files to original destination
+      copy:
+        src: "/tmp/QC{{ qc_number }}/{{ item.0 | basename }}.bak"
+        dest: "{{ item.1 }}"
+        mode: "{{ item.2 }}"
+      with_items: "{{ file_entries_list }}"
+      when: ansible.builtin.stat(path="/tmp/QC{{ qc_number }}/{{ item.0 | basename }}.bak").exists
