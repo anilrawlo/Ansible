@@ -1,0 +1,35 @@
+
+
+
+
+pipeline {
+    agent any
+
+    parameters {
+        string(name: 'ENVIRONMENT', description: 'Enter the environment (e.g., dev, prod)', defaultValue: 'dev')
+        string(name: 'PACKAGE_NAME', description: 'Enter the package name for the Ansible playbook', defaultValue: 'myapp')
+    }
+
+    stages {
+        stage('Execute Ansible Playbook') {
+            steps {
+                script {
+                    // Define the command to execute the Ansible playbook with variables
+                    def ansibleCmd = "ansible-playbook -e environment=${params.ENVIRONMENT} -e package_name=${params.PACKAGE_NAME} playbook.yml"
+
+                    // Execute the Ansible playbook
+                    sh ansibleCmd
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo "Ansible playbook executed successfully."
+        }
+        failure {
+            echo "Ansible playbook execution failed."
+        }
+    }
+}
