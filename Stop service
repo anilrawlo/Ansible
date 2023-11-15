@@ -1,0 +1,32 @@
+
+---
+- name: Stop JBoss Service
+  shell: /opt/jboss/stop
+  register: stop_result
+  ignore_errors: true
+
+- name: Display Success Message
+  debug:
+    msg: "JBoss service stopped successfully."
+  when: stop_result.rc == 0
+
+===================
+
+---
+- name: Run /opt/jboss/migration.sh
+  shell: /opt/jboss/migration.sh
+  register: migration_script_result
+
+- name: Display Status for /opt/jboss/migration.sh
+  debug:
+    msg: "Script /opt/jboss/migration.sh executed successfully."
+  when: migration_script_result.rc == 0
+
+- name: Run /opt/jboss/SI/migration.sh
+  shell: /opt/jboss/SI/migration.sh
+  register: si_migration_script_result
+
+- name: Display Status for /opt/jboss/SI/migration.sh
+  debug:
+    msg: "Script /opt/jboss/SI/migration.sh executed successfully."
+  when: si_migration_script_result.rc == 0
