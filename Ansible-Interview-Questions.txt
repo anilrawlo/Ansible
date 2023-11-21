@@ -1,0 +1,671 @@
+Ansible interview question and answers for  BEGINER LEVEL
+Q1: What is Ansible?
+Ansible is an open-source automation tool that allows you to automate the configuration, management, and deployment of systems. It uses a simple and declarative language called YAML to define the automation tasks, making it easy to understand and maintain.
+
+ 
+
+Q2: What are the key components of Ansible?
+The key components of Ansible are:
+
+- Inventory: It is a list of hosts or servers on which Ansible performs operations.
+- Playbooks: They are YAML files that define the tasks and automation steps.
+- Modules: These are small pieces of code that Ansible executes on remote hosts to perform specific tasks.
+- Ad-hoc commands: These are commands that you can run on the command line using the `ansible` command, without the need for a playbook.
+
+ 
+
+Q3: What is an Ansible playbook?
+An Ansible playbook is a YAML file that defines a set of tasks and configurations to be executed on remote hosts. Playbooks are used to automate complex tasks and workflows, allowing you to define the desired state of the system and let Ansible handle the execution.
+
+ 
+
+Q4: How do you define a variable in Ansible?
+In Ansible, you can define variables in multiple ways:
+
+- In the playbook: You can define variables directly in the playbook using the `vars` keyword.
+- In inventory: You can define variables for specific hosts or groups in the inventory file.
+- In separate variable files: You can create separate YAML files to store variables and include them in the playbook using the `vars_files` directive.
+- Using command-line arguments: You can pass variables as command-line arguments when running the Ansible command.
+
+ 
+
+Q5: What is the difference between a role and a playbook in Ansible?
+A playbook is a single YAML file that defines a set of tasks and configurations. It provides a way to organize and execute automation on remote hosts.
+
+On the other hand, a role is a predefined directory structure that encapsulates reusable and independent Ansible automation. It consists of tasks, templates, files, and other directories that can be easily shared and included in playbooks. Roles help in modularizing and organizing complex automation scenarios.
+
+ 
+
+Q6: How do you run an Ansible playbook?
+To run an Ansible playbook, you can use the `ansible-playbook` command followed by the playbook filename. For example:
+```
+ansible-playbook myplaybook.yml
+```
+This command will execute the tasks defined in the playbook against the hosts specified in the inventory.
+
+ 
+
+Q7: What is the purpose of the Ansible Galaxy?
+Ansible Galaxy is a hub for sharing and discovering Ansible content. It provides a vast collection of roles, playbooks, and other Ansible content created by the community. You can use Ansible Galaxy to search for pre-built automation content and integrate it into your own projects, saving time and effort.
+
+ 
+
+Q8: How can you handle conditional tasks in Ansible?
+Ansible provides a `when` statement that allows you to define conditions for task execution. You can use this statement to run tasks conditionally based on the values of variables or other facts about the target system. For example:
+```yaml
+- name: Install package
+  yum:
+    name: mypackage
+    state: present
+  when: ansible_distribution == 'CentOS'
+```
+
+Q9: What is the difference between Ansible and other configuration management tools like Puppet or Chef?
+Ansible is agentless, meaning it does not require any software to be installed on the managed hosts. It uses SSH and modules on the remote hosts to perform tasks. In contrast, tools like Puppet or Chef use agents installed on the managed hosts to communicate and enforce configurations.
+
+ 
+
+Q10: How do you define and use roles in Ansible?
+Roles in Ansible provide a way to group related tasks, variables, and files together for better organization and reusability. To define a role, you create a specific directory structure containing tasks, templates, files, and other resources. Roles can then be included in playbooks using the `roles` directive. For example:
+```yaml
+- name: Example playbook
+  hosts: myhosts
+  roles:
+    - myrole
+```
+This example includes the `myrole` role in the playbook.
+
+ 
+
+Q11: How can you manage secrets and sensitive data in Ansible?
+Ansible provides a feature called Ansible Vault, which allows you to encrypt and decrypt sensitive data files. You can encrypt variables, files, or even entire playbooks using a password or a vault key file. This helps in securely storing and managing secrets, such as passwords or API keys, within your Ansible projects.
+
+ 
+
+Q12: What are handlers in Ansible?
+Handlers in Ansible are tasks that are only executed when notified. They are typically used to trigger actions that need to be performed at the end of a playbook run, such as restarting services or reloading configurations. Handlers are defined separately from tasks and can be notified using the `notify` directive.
+
+ 
+
+Q13: How can you test Ansible configurations without making changes on the managed hosts?
+Ansible provides a "check mode" option that allows you to perform a dry run of a playbook or task. When check mode is enabled, Ansible simulates the changes it would make but does not actually apply them to the managed hosts. This is useful for testing and validating configurations before applying them.
+
+ 
+
+Q14: What is the Ansible ad-hoc command?
+The Ansible ad-hoc command is a command-line tool that allows you to execute one-off tasks quickly without the need for a playbook. Ad-hoc commands are useful for performing simple tasks like running shell commands, managing packages, or copying files. For example:
+```
+ansible myhosts -m shell -a "uptime"
+```
+This ad-hoc command runs the `uptime` command on the hosts specified by `myhosts`.
+
+ 
+
+Q15: How can you loop over a list of items in Ansible?
+Ansible provides various looping mechanisms. One common way is to use the `with_items` directive with a list of items in a task. For example:
+```yaml
+- name: Install packages
+  yum:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - package1
+    - package2
+    - package3
+```
+This task will loop over the list of packages and install each one.
+
+ 
+
+Q16: How can you debug Ansible playbooks and tasks?
+Ansible offers several methods for debugging, such as using the `debug` module to print variable values or using the `ansible-playbook` command with the `-vvv` option for verbose output. Additionally, you can leverage the `--start-at-task` option to start the playbook execution from a specific task for troubleshooting purposes.
+
+​
+
+Ansible interview question and answers for  INTERMEDIATE LEVEL
+Q1: What is Ansible Tower?
+Ansible Tower is a web-based user interface and management tool for Ansible. It provides a centralized platform for managing and orchestrating Ansible automation, including features like role-based access control, job scheduling, and a graphical dashboard for monitoring and tracking automation tasks.
+
+ 
+
+Q2: What is the purpose of Ansible facts?
+Ansible facts are variables that contain information about the target hosts. They are automatically gathered by Ansible and can be used in playbooks and templates. Facts include details like the operating system, IP addresses, installed packages, and more. You can also create custom facts using scripts or plugins to gather specific information.
+
+ 
+
+Q3: How can you handle error handling and retries in Ansible?
+Ansible provides error handling mechanisms to handle task failures and retries. You can use the `failed_when` attribute in tasks to specify conditions under which a task should be considered failed. Additionally, you can use the `retries` and `until` attributes to specify the number of retries and conditions for retrying a task.
+
+ 
+
+Q4: Explain how Ansible manages idempotence.
+Ansible is designed to be idempotent, meaning that running the same playbook multiple times should result in the same desired state. It achieves idempotence by checking the current state of the system before performing any changes. Ansible compares the desired state defined in the playbook with the actual state on the target hosts and only executes tasks if there is a difference.
+
+ 
+
+Q5: What are Ansible tags, and how can you use them?
+Ansible tags allow you to selectively run specific tasks or groups of tasks in a playbook. You can assign tags to tasks and then use the `--tags` or `--skip-tags` options with the `ansible-playbook` command to specify which tasks to include or exclude during playbook execution. Tags are useful for running only specific parts of a playbook or skipping certain tasks.
+
+ 
+
+Q6: How can you handle sensitive data like passwords in Ansible?
+To handle sensitive data like passwords, Ansible provides the `ansible-vault` command-line tool. It allows you to encrypt files containing sensitive information and decrypt them during playbook execution. Encrypted files can be stored in source control systems, and Ansible Vault prompts for the password when executing the playbook.
+
+ 
+
+Q7: Explain Ansible's delegation and delegation strategies.
+Delegation in Ansible allows a task to be executed on one host while targeting a different host. It is useful when you need to run a task on a different machine than the one running the playbook. Ansible provides delegation strategies like `delegate_to` to specify a different host for the task, `delegate_facts` to gather facts from a different host, and `run_once` to ensure a task runs only once in a play.
+
+ 
+
+Q8: How can you create custom Ansible modules?
+Ansible modules are reusable pieces of code used to perform specific tasks on remote hosts. To create custom modules, you can write them in any language that can output JSON, such as Python or Ruby. Modules should follow the Ansible module API guidelines and be placed in the appropriate module directories. Custom modules can extend Ansible's functionality to cater to specific automation requirements.
+
+ 
+
+Q9: What are Ansible Callback Plugins?
+Ansible Callback Plugins are extensions that allow you to customize the output of Ansible tasks and playbooks. They capture events during playbook execution and provide additional reporting or integration capabilities. Callback Plugins can be used to generate custom reports, send notifications, or integrate with external systems for logging or monitoring.
+
+ 
+
+Q10: How can you integrate Ansible with version control systems?
+Ansible integrates well with version control systems like Git. You can store your playbooks,
+
+ inventory files, and other Ansible content in a Git repository. This enables versioning, collaboration, and easy deployment of changes. Additionally, Ansible supports Git modules that allow you to interact with Git repositories and perform operations like cloning, pulling, or checking out specific branches.
+
+​
+
+Ansible interview question and answers for ADVANCED LEVEL
+Q1: What are some of the advanced features of Ansible?
+A1: Some advanced features of Ansible include:
+
+- Roles: Roles allow you to encapsulate a set of tasks and files into a reusable component, making it easier to organize and share playbooks.
+- Ansible Vault: Ansible Vault provides a way to encrypt sensitive data, such as passwords or API keys, within your playbooks or variable files.
+- Dynamic inventory: Ansible supports dynamic inventory, allowing you to define inventory hosts dynamically from external systems or cloud providers.
+- Callback plugins: Callback plugins enable you to customize the output and behavior of Ansible by hooking into various events during playbook execution.
+- Ansible Tower: Ansible Tower is a web-based UI and management platform for Ansible, providing additional features like role-based access control, job scheduling, and more.
+
+ 
+
+Q2: How can you conditionally skip a task in Ansible?
+A2: You can conditionally skip a task in Ansible by using the `when` keyword. The `when` keyword allows you to specify a condition that determines whether a task should be executed or skipped. For example:
+
+```yaml
+- name: Execute task only if variable is true
+  shell: echo "Task executed"
+  when: my_variable == true
+```
+
+Q3: How can you run a task on a specific subset of hosts in an Ansible playbook?
+A3: You can use Ansible's inventory patterns to run tasks on a specific subset of hosts. Inventory patterns allow you to target specific hosts based on criteria such as groups, hostnames, IP addresses, or other factors. Here are a few examples:
+
+- Run a task on a specific group of hosts:
+  ```yaml
+  - hosts: web_servers
+    tasks:
+      - name: Task to run on web servers
+        shell: echo "Task executed"
+  ```
+
+- Run a task on hosts matching a specific pattern:
+  ```yaml
+  - hosts: "*.example.com"
+    tasks:
+      - name: Task to run on hosts matching the pattern
+        shell: echo "Task executed"
+  ```
+
+Q4: How can you dynamically generate variables in Ansible?
+A4: Ansible provides several ways to dynamically generate variables. Some common approaches include using the `set_fact` module, registering the output of a task as a variable, or using lookup plugins. Here's an example using the `set_fact` module:
+
+```yaml
+- name: Dynamically generate a variable
+  set_fact:
+    dynamic_var: "generated value"
+```
+
+Q5: How can you handle errors or failures in Ansible playbooks?
+A5: Ansible provides error handling mechanisms to handle failures in playbooks. You can use the `ignore_errors` parameter to continue executing tasks even if one fails, or you can use the `failed_when` parameter to define conditions under which a task should be considered failed. Here's an example:
+
+```yaml
+- name: Handle failures
+  command: some_command
+  ignore_errors: yes
+  failed_when: "'FAILED' in command_result.stdout"
+```
+
+Q6: What are Ansible Galaxy and how can you use it?
+A6: Ansible Galaxy is a hub for finding, reusing, and sharing Ansible roles. It is a community-driven platform that allows you to browse and download roles contributed by other users. You can use Ansible Galaxy to enhance your playbooks by leveraging existing roles instead of reinventing the wheel. To use Ansible Galaxy, you can use the `ansible-galaxy` command-line tool to search for, install, and manage roles from the Galaxy repository.
+
+​
+
+Q7: How can you dynamically generate inventory in Ansible?
+A7: Ansible supports dynamic inventory, which allows you to generate inventory dynamically based on external systems or cloud providers. You can write a custom inventory script or use one of the built-in dynamic inventory scripts provided by Ansible, such as the AWS EC2 inventory script. These scripts retrieve inventory information at runtime, enabling you to manage a dynamic infrastructure.
+
+​
+
+Q8: What are Ansible facts and how can you gather them?
+A8: Ansible facts are system variables that provide information about remote hosts, such as network interfaces, operating system details, hardware information, and more. Facts are gathered by Ansible automatically when a playbook runs. You can access and use these facts within your playbooks by referencing them with the `ansible_facts` variable.
+
+​
+
+Q9: How can you perform rolling updates or rolling deployments using Ansible?
+A9: Rolling updates or deployments involve updating a subset of hosts at a time, reducing the impact on the overall system. Ansible provides strategies like `serial` and `max_fail_percentage` to achieve rolling updates. By specifying a specific number or percentage of hosts to update concurrently, you can control the rolling process. Here's an example:
+
+```yaml
+- name: Perform rolling updates
+  hosts: my_group
+  serial: 2
+  max_fail_percentage: 25
+  tasks:
+    - name: Update task
+      shell: "update_command"
+```
+
+This example will update two hosts at a time and allow up to 25% of hosts to fail before considering the task failed.
+
+​
+
+Q10: How can you implement idempotence in Ansible playbooks?
+A10: Ansible promotes idempotent playbooks, where running a playbook multiple times produces the same result as running it once. To ensure idempotence, you can use modules that are designed to be idempotent, like `yum` or `apt`, which handle package installation. You can also use conditional statements with `when` to check if a task needs to be executed or skipped based on a specific condition.
+
+​
+
+Q11: How can you handle sensitive data in Ansible playbooks?
+A11: Ansible provides Ansible Vault for encrypting sensitive data within playbooks and variable files. With Ansible Vault, you can encrypt variables, files, and even entire playbooks using a password or encryption key. This helps secure sensitive information like passwords, API keys, or any other confidential data stored in your playbooks.
+
+​
+
+Q12: How can you extend Ansible functionality using custom modules?
+A12: Ansible allows you to extend its functionality by creating custom modules. Custom modules are standalone scripts or programs written in any language that adhere to a specific interface. These modules can perform tasks not covered by built-in Ansible modules. Once created, you can place custom modules in a directory specified by the `library` parameter in your Ansible configuration file to make them accessible.
+
+​
+
+Ansible interview question and answers SCENARIO BASED
+Scenario 1: Configuration Management
+
+Q1: You have a fleet of web servers that need to be configured with specific packages, services, and configurations. How would you use Ansible to automate this configuration management process?
+
+A1: In this scenario, you can use Ansible to create playbooks that define the desired state of each web server. The playbooks would include tasks to install required packages, start or enable services, and apply necessary configurations. You can group the web servers using inventory and execute the playbooks against the appropriate group of hosts.
+
+Example playbook snippet:
+```yaml
+- name: Configure web servers
+  hosts: webservers
+  tasks:
+    - name: Install required packages
+      package:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - package1
+        - package2
+
+    - name: Start and enable services
+      service:
+        name: "{{ item }}"
+        state: started
+        enabled: yes
+      loop:
+        - service1
+        - service2
+
+    - name: Apply configuration files
+      template:
+        src: /path/to/template.conf.j2
+        dest: /etc/myapp/conf.conf
+```
+
+Scenario 2: Application Deployment
+
+Q2: You have developed a web application that needs to be deployed to multiple servers. Each server requires specific configurations and dependencies. How can you use Ansible to automate the application deployment process?
+
+A2: In this scenario, you can utilize Ansible to create playbooks that handle the entire application deployment process. The playbooks would include tasks to copy application files, install dependencies, configure the application, and start necessary services. You can define different host groups in the inventory to target specific servers with specific configurations.
+
+Example playbook snippet:
+```yaml
+- name: Deploy web application
+  hosts: webservers
+  tasks:
+    - name: Copy application files
+      copy:
+        src: /path/to/application
+        dest: /var/www/html/
+      notify:
+        - Restart Apache
+
+    - name: Install dependencies
+      package:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - dependency1
+        - dependency2
+
+    - name: Configure application
+      template:
+        src: /path/to/config.conf.j2
+        dest: /etc/myapp/config.conf
+
+    - name: Start services
+      service:
+        name: apache2
+        state: started
+
+  handlers:
+    - name: Restart Apache
+      service:
+        name: apache2
+        state: restarted
+```
+
+​
+
+Ansible Commands
+​
+
+1. `ansible all -m ping`: Checks connectivity to all hosts in the inventory.
+   - Output: Displays the ping response from each host.
+   - Explanation: This command verifies if Ansible can reach and communicate with all hosts in the inventory.
+
+ 
+
+2. `ansible-playbook playbook.yml`: Executes a playbook.
+   - Output: Executes the tasks defined in the playbook.
+   - Explanation: This command runs a playbook, which is a collection of tasks and configurations, on the target hosts.
+
+ 
+
+3. `ansible all -a "ls -l /tmp"`: Executes a command on all hosts in the inventory.
+   - Output: Lists the files and directories in the `/tmp` directory on each host.
+   - Explanation: This command runs the `ls -l /tmp` command on all hosts, allowing you to perform ad-hoc tasks.
+
+ 
+
+4. `ansible-doc module_name`: Displays documentation for a specific Ansible module.
+   - Output: Displays the module's documentation.
+   - Explanation: This command provides detailed information about a specific Ansible module, including its parameters and usage examples.
+
+ 
+
+5. `ansible-galaxy init role_name`: Initializes a new Ansible role.
+   - Output: Creates the directory structure and files for the new role.
+   - Explanation: This command sets up the basic structure and files needed for creating a reusable Ansible role.
+
+ 
+
+6. `ansible-vault create secrets.yml`: Creates a new encrypted Ansible Vault file.
+   - Output: Creates an encrypted `secrets.yml` file.
+   - Explanation: This command creates a new Ansible Vault file for storing sensitive data, encrypting it with a password.
+
+ 
+
+7. `ansible-vault edit secrets.yml`: Opens an existing Ansible Vault file for editing.
+   - Output: Opens the `secrets.yml` file in an editor.
+   - Explanation: This command allows you to edit an existing Ansible Vault file and update the encrypted contents.
+
+ 
+
+8. `ansible-vault encrypt secrets.yml`: Encrypts an existing file using Ansible Vault.
+   - Output: Encrypts the contents of `secrets.yml`.
+   - Explanation: This command encrypts the contents of a file using Ansible Vault, protecting sensitive data.
+
+ 
+
+9. `ansible-vault decrypt secrets.yml`: Decrypts an Ansible Vault-encrypted file.
+   - Output: Decrypts the contents of `secrets.yml`.
+   - Explanation: This command decrypts an Ansible Vault-encrypted file, making its contents readable again.
+
+ 
+
+10. `ansible-vault rekey secrets.yml`: Changes the password for an Ansible Vault file.
+    - Output: Updates the password for `secrets.yml`.
+    - Explanation: This command allows you to change the password used to encrypt an Ansible Vault file.
+
+ 
+
+11. `ansible-playbook --limit host1 playbook.yml`: Runs a playbook only on a specific host.
+    - Output: Executes the tasks defined in the playbook on `host1` only.
+    - Explanation: By specifying the `--limit` option, this command limits the execution of a playbook to a specific host.
+
+ 
+
+12. `ansible-playbook --tags deploy playbook.yml`: Runs specific tagged tasks in a playbook.
+    - Output: Executes only the tasks in the playbook with the `deploy` tag.
+    - Explanation: This command selectively runs tasks in a playbook that are tagged with the specified tag(s), allowing for targeted execution.
+
+ 
+
+13. `ansible-playbook --skip-tags deploy playbook.yml`: Skips specific tagged tasks in a playbook.
+    - Output: Skips the tasks in the playbook with the `deploy` tag.
+    - Explanation: This command skips the execution of tasks in a playbook that are
+
+ tagged with the specified tag(s).
+
+ 
+
+14. `ansible-playbook --check playbook.yml`: Performs a dry run of a playbook.
+    - Output: Displays the changes that would be made without actually applying them.
+    - Explanation: This command runs a playbook in a "check" mode, simulating the execution and providing a preview of the changes that would occur.
+
+ 
+
+15. `ansible-playbook --diff playbook.yml`: Shows the differences in file contents before and after a task.
+    - Output: Displays the differences between file versions.
+    - Explanation: This command enables the display of differences in file contents before and after the execution of tasks in a playbook.
+
+ 
+
+16. `ansible-galaxy install author.role_name`: Installs an Ansible role from Galaxy.
+    - Output: Downloads and installs the specified role.
+    - Explanation: This command installs an Ansible role from the Ansible Galaxy, a community-driven repository of reusable roles.
+
+ 
+
+17. `ansible-galaxy remove author.role_name`: Removes an installed Ansible role.
+    - Output: Removes the specified role from the system.
+    - Explanation: This command uninstalls and removes an installed Ansible role from the system.
+
+ 
+
+18. `ansible-vault encrypt_string 'sensitive_data' --name 'secret_var'`: Encrypts a string using Ansible Vault.
+    - Output: Outputs the encrypted string.
+    - Explanation: This command encrypts a sensitive string using Ansible Vault and outputs the encrypted value, which can be stored as an encrypted variable.
+
+ 
+
+19. `ansible all -m setup`: Gathers facts from all hosts in the inventory.
+    - Output: Retrieves system information and facts from each host.
+    - Explanation: This command collects system-related information, such as hardware, operating system, and network details, from all hosts.
+
+ 
+
+20. `ansible all -m command -a 'reboot' --become`: Reboots all hosts in the inventory.
+    - Output: Reboots each host.
+    - Explanation: This command executes the `reboot` command on all hosts with elevated privileges, restarting the machines.
+
+ 
+
+21. `ansible all -m copy -a 'src=file.txt dest=/tmp/file.txt'`: Copies a file to all hosts in the inventory.
+    - Output: Copies `file.txt` to the `/tmp` directory on each host.
+    - Explanation: This command copies a file from the local machine to the `/tmp` directory on all hosts.
+
+ 
+
+22. `ansible all -m file -a 'path=/tmp/file.txt state=absent'`: Deletes a file from all hosts in the inventory.
+    - Output: Deletes `/tmp/file.txt` on each host.
+    - Explanation: This command removes the specified file from the `/tmp` directory on all hosts.
+
+ 
+
+23. `ansible all -m service -a 'name=httpd state=started' --become`: Starts the Apache HTTPD service on all hosts.
+    - Output: Starts the Apache HTTPD service on each host.
+    - Explanation: This command ensures that the Apache HTTPD service is running on all hosts, starting it if necessary.
+
+ 
+
+24. `ansible all -m apt -a 'name=nginx state=present' --become`: Installs the Nginx package on all hosts using APT package manager.
+    - Output: Installs the Nginx package on each host.
+    - Explanation: This command installs the Nginx web server package on all hosts using the APT package manager.
+
+ 
+
+25. `ansible all -m yum -a 'name=nginx state=present' --become`: Installs the Nginx package on all hosts using YUM package manager.
+    - Output: Installs the Nginx package on each host.
+    -
+
+ Explanation: This command installs the Nginx web server package on all hosts using the YUM package manager.
+
+ 
+
+26. `ansible all -m service -a 'name=nginx state=stopped' --become`: Stops the Nginx service on all hosts.
+    - Output: Stops the Nginx service on each host.
+    - Explanation: This command ensures that the Nginx service is stopped on all hosts.
+
+ 
+
+27. `ansible all -m lineinfile -a 'dest=/etc/hosts line="127.0.0.1 example.com"' --become`: Adds a line to the `/etc/hosts` file on all hosts.
+    - Output: Adds the specified line to the `/etc/hosts` file on each host.
+    - Explanation: This command appends a line to the `/etc/hosts` file on all hosts, mapping the IP address `127.0.0.1` to the domain `example.com`.
+
+ 
+
+28. `ansible all -m user -a 'name=jdoe state=present' --become`: Creates a user account named `jdoe` on all hosts.
+    - Output: Creates the user account `jdoe` on each host.
+    - Explanation: This command creates a new user account named `jdoe` on all hosts.
+
+ 
+
+29. `ansible all -m group -a 'name=developers state=present' --become`: Creates a group named `developers` on all hosts.
+    - Output: Creates the group `developers` on each host.
+    - Explanation: This command creates a new group named `developers` on all hosts.
+
+ 
+
+30. `ansible all -m authorized_key -a 'user=jdoe key="{{ lookup("file", "/path/to/public_key.pub") }}"' --become`: Adds an SSH public key for the user `jdoe` on all hosts.
+    - Output: Adds the specified public key for the user `jdoe` on each host.
+    - Explanation: This command adds an SSH public key for the user `jdoe` on all hosts, allowing SSH access with the corresponding private key.
+
+ 
+
+31. `ansible all -m git -a 'repo=https://github.com/example/repo.git dest=/opt/repo version=master'`: Clones a Git repository on all hosts.
+    - Output: Clones the specified Git repository to the `/opt/repo` directory on each host.
+    - Explanation: This command clones a Git repository from the specified URL to the `/opt/repo` directory on all hosts.
+
+ 
+
+32. `ansible all -m docker_image -a 'name=nginx:latest state=present'`: Pulls the latest Nginx Docker image on all hosts.
+    - Output: Pulls the latest Nginx Docker image on each host.
+    - Explanation: This command pulls the latest version of the Nginx Docker image from the Docker registry on all hosts.
+
+ 
+
+33. `ansible all -m docker_container -a 'name=mynginx image=nginx:latest state=started'`: Runs a Docker container named `mynginx` from the Nginx image on all hosts.
+    - Output: Runs the Nginx Docker container named `mynginx` on each host.
+    - Explanation: This command starts a Docker container named `mynginx` using the Nginx image on all hosts.
+
+ 
+
+34. `ansible all -m systemd -a 'name=nginx state=restarted' --become`: Restarts the Nginx service using systemd on all hosts.
+    - Output: Restarts the Nginx service on each host.
+    - Explanation: This command restarts the Nginx service using systemd on all hosts.
+
+ 
+
+35. `ansible
+
+ all -m shell -a 'command'`: Executes a shell command on all hosts.
+    - Output: Executes the specified shell command on each host.
+    - Explanation: This command runs a shell command on all hosts, allowing for arbitrary commands to be executed.
+
+ 
+
+36. `ansible all -m raw -a 'command'`: Executes a raw command on all hosts.
+    - Output: Executes the specified raw command on each host.
+    - Explanation: This command executes a raw command without going through the Ansible module system, providing more flexibility for complex tasks.
+
+ 
+
+37. `ansible all -m apt -a 'update_cache=yes' --become`: Updates the APT package cache on all hosts.
+    - Output: Updates the APT package cache on each host.
+    - Explanation: This command updates the package cache for APT on all hosts, ensuring that the latest package information is available.
+
+ 
+
+38. `ansible all -m yum -a 'update_cache=yes' --become`: Updates the YUM package cache on all hosts.
+    - Output: Updates the YUM package cache on each host.
+    - Explanation: This command updates the package cache for YUM on all hosts, ensuring that the latest package information is available.
+
+ 
+
+39. `ansible all -m apt -a 'name=nginx state=absent' --become`: Removes the Nginx package using APT on all hosts.
+    - Output: Removes the Nginx package on each host.
+    - Explanation: This command removes the Nginx package from all hosts using the APT package manager.
+
+ 
+
+40. `ansible all -m yum -a 'name=nginx state=absent' --become`: Removes the Nginx package using YUM on all hosts.
+    - Output: Removes the Nginx package on each host.
+    - Explanation: This command removes the Nginx package from all hosts using the YUM package manager.
+
+ 
+
+41. `ansible all -m command -a 'uptime'`: Retrieves the uptime information of all hosts.
+    - Output: Displays the uptime information of each host.
+    - Explanation: This command retrieves the uptime information of all hosts by executing the `uptime` command.
+
+ 
+
+42. `ansible all -m copy -a 'content="Hello, World!" dest=/tmp/greeting.txt'`: Creates a file with content on all hosts.
+    - Output: Creates the file `/tmp/greeting.txt` with the specified content on each host.
+    - Explanation: This command creates a file with the specified content on all hosts at the specified destination.
+
+ 
+
+43. `ansible all -m lineinfile -a 'path=/etc/hosts line="192.168.0.1 host1.example.com" state=present' --become`: Ensures a line is present in the `/etc/hosts` file on all hosts.
+    - Output: Adds the specified line to the `/etc/hosts` file on each host if it doesn't exist.
+    - Explanation: This command ensures that the specified line is present in the `/etc/hosts` file on all hosts. If the line doesn't exist, it will be added.
+
+ 
+
+44. `ansible all -m template -a 'src=template.j2 dest=/etc/config.conf'`: Renders a Jinja2 template and deploys it to all hosts.
+    - Output: Deploys the rendered template to `/etc/config.conf` on each host.
+    - Explanation: This command renders a Jinja2 template and deploys the resulting file to the specified destination on all hosts.
+
+ 
+
+45. `ansible all -m systemd -a 'name=nginx enabled=yes' --become`: Enables the Nginx service to start on boot using systemd on all hosts.
+    - Output
+
+: Enables the Nginx service to start on boot on each host.
+    - Explanation: This command configures the Nginx service to start automatically on boot using systemd on all hosts.
+
+ 
+
+46. `ansible all -m command -a 'echo {{ inventory_hostname }}'`: Prints the hostname of all hosts.
+    - Output: Prints the hostname of each host.
+    - Explanation: This command retrieves and prints the hostname of all hosts.
+
+ 
+
+47. `ansible all -m debug -a 'msg="{{ ansible_distribution }}"'`: Displays the distribution name of all hosts.
+    - Output: Displays the distribution name of each host.
+    - Explanation: This command retrieves and displays the distribution name of all hosts using the `ansible_distribution` variable.
+
+ 
+
+48. `ansible all -m setup -a 'filter=ansible_mounts'`: Retrieves information about mounted filesystems on all hosts.
+    - Output: Displays information about mounted filesystems on each host.
+    - Explanation: This command retrieves and displays information about mounted filesystems on all hosts.
+
+ 
+
+49. `ansible all -m file -a 'path=/tmp/test.txt mode=0644'`: Changes the permissions of a file on all hosts.
+    - Output: Changes the permissions of `/tmp/test.txt` to `0644` on each host.
+    - Explanation: This command modifies the permissions of a file to the specified mode on all hosts.
+
+ 
+
+50. `ansible all -m shell -a 'ls -l /tmp'`: Executes a shell command on all hosts and displays the output.
+    - Output: Executes the `ls -l /tmp` command on each host and displays the output.
+    - Explanation: This command runs the specified shell command on all hosts and shows the resulting output.

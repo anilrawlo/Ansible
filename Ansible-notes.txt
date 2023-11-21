@@ -1,0 +1,555 @@
+
+
+Ansible Day-1 session
+-------------------------------
+pre-requestics:
+1. We expect the particpant have a basic working knowledge on Linux 
+2. It would be good if u have some knowledge on Cloud (AWS,Azure, GCP)
+3.If you have some basic on scripting (Bash, Perl,Python)
+
+Machine Details:
+
+https://lab.rtscloud.in
+
+Username - user128
+Password- Admin@123
+
+All the 3 VM's are Ubuntu 18.04 ,Centos 7.8 ( I will login in my AWS account and i will use Centos 7.8 EC2 machine ,show
+the example ,demo's) 
+
+-----------------------------
+10:30AM -- 12:00PM (1 1/2 Hours) , 10 to 15 mins break
+
+12:15PM - 1:15PM - 
+
+1:15PM - 1:45Pm ( Lunch Break)
+
+1:50PM - 03:15PM 
+
+---------------------
+
+
+Ansible --> Basic configuration management tool , Ansible its of product of RedHat , it was desgined by the person
+Micheal Dehaan
+
+
+CM tool --> Operation on the OS, os patch , Networking patches , Adminstratives tasks 
+
+
+Ansible 
+
+Long 20 hours -- System Admin
+
+Install OS, software stack is needed (JDk,JRE) , Environment setup to be done 
+Username /password - hostname/IP -address 
+
+100 hours - System Admin 
+
+
+System admin --
+Bash shell scripting -- > Some what better , 
+
+Devops -- > model --> deliver the product faster to the market - 
+
+Ansible is also used for 
+Terraform --IAC ---Provision the infrastrcuture (AWS,Azure,GCP,ALiBaba, Digital Cloud ) 
+
+1.Provisoing -- VM , storage ,Network ( subnet,VPC), load balancer
+2. Install the softwares 
+
+
+Usage of Ansible 
+1. Infrastructure provisiong
+2. Network Automation (switches , Routers )
+3. Adminstrative tasks ( Installing the softwares, taking back of the data , cronjob ) 
+
+CFEngine
+
+Puppet
+
+CHEF
+
+Ansible
+
+Bamboo (CM)
+Teamcity (CM)
+
+Ansbile is most widely used , 
+1. Light weight 
+2. Simple to use 
+3. No Programming is required
+4. Agent less
+
+Ansible is Open Source--> u can contact ansible support team , subscription cost
+
+Ansible is GPL license ---> Default it can communicate 5 server
+
+Rajesh - Open source FSF GNU orgranization 
+
+-----------------------------------------------
+Prequestics for Ansible setup 
+
+3 servers ( Ubuntu 18.04) or Centos (7.8 , 8) 
+
+1. Ansible control server
+2. Worker-node-1
+3. Worker -node -1
+
+Editor - > Atom or Visual studio code 
+
+
+CM are broadly categorized into 
+1.Push Based - Ansible 
+2.Pull Based - Puppet ,Chef
+
+Ansible is desgined by using Python 
+
+Puppet /Chef-- Ruby Language
+
+
+To do Ansible Setup , 
+1. you need to install Python3 in all the 3 servers,but python is already installed
+2. Any 1 server u need to install Ansible 
+3. Some common user account need to be created , so you need to create user account in all the 3 servers,
+using useradd ( adduser) command
+
+
+Most of the cloud (AWS) , they will disable the Password Authentication  , you need to enable it 
+
+vi /etc/ssh/sshd_config
+PasswordAuthentication yes
+:wq!
+
+sudo systemctl restart sshd--- > command to restart the sshd service
+sudo systemctl status sshd --> to check the status
+service sshd restart
+
+
+sudo user are basically have some root previeldge ,so that he can execute the root user's related commands
+
+root /sudo user ---> mounting of the file system 
+if u need install any software , root/sudo
+
+root - id 0 
+Normal user---- id 1000
+
+sudoers
+
+
+
+Ansible is very Light weight - 2GB Ram , 1core CPU , you can comfortably work on Ansible
+
+AWS ( t2.large type)
+
+8 core CPU , 16GB RAM 
+
+:wq!
+:x
+
+step2: Create common user account name by ansible
+
+sudo adduser ansible
+---> password - ansible
+
+Execute the above command in all the 3 VM's
+
+
+step3:
+
+You need to make ansible user account as sudo , so u need to execute the command
+sudo visudo --> /etc/sudoers 
+
+sudo apt update --> this command basically updates the debian package management
+
+sudo yum update ---> if u r working on Redhat/Centos - Updating yum repository
+
+Step4:
+Installing Ansible package in server1 VM
+
+sudo apt-add-repository ppa:ansible/ansible
+sudo apt update
+sudo apt install ansible
+
+
+server1 -- is where we have installed Ansible
+
+Ansible setup is completed and we could verify by executing
+
+ansible --version
+
+/etc/ansible/ansible.cfg --default home direcotry of the ansible
+
+
+cd /etc/ansible
+you can 2 imp files
+
+ansible.cfg --> configuration file of Ansible
+hosts ---> inventory 
+roles --> 
+
+Ansible server IP - 192.168.211.131
+node-1 : 192.168.211.132
+node-2: 192.168.211.133
+
+to change the hostname ,u need to execute the command
+sudo hostnamectl set-hostname ansible-server
+sudo hostnamectl set-hostname node-1
+sudo hostnamectl set-hostname node-2
+
+
+All the 3 servers should be inter pingable ( reachable)
+you can add the entries of hostname with IP address in the file /etc/hosts
+
+sudo vi /etc/hosts
+----
+----
+
+ping node-1
+ping node-2
+
+/etc/ansible/hosts -- by default it has ini format data--- > inventory --- static inventory file
+
+inventory ---  1.static 2.Dynamic 
+
+
+---------------------------------------------------
+
+Ansible Day-2 session (08/09/2022)
+
+The default user name for logging into the server
+
+1.ubuntu server ---Username is ubuntu- ( sudo apt update)
+
+2. Centos server --Username is centos ( sudo yum update )
+
+3. Redhat/Amazon Linux --- username is ec2-user
+
+Ansible server - 172.31.88.93
+
+Node-1 - 172.31.93.182
+
+Node-2 - 172.31.85.104
+
+Node-3 - 172.31.85.102
+
+INI format ---Ansible understand the INI format
+
+How to disable the host_key_checking 
+
+sudo vi /etc/ansible/ansible.cfg
+# uncomment this to disable SSH key host checking
+host_key_checking = False
+
+export ANSIBLE_HOST_KEY_CHECKING=False
+
+   1  sudo apt update
+    2  exit
+    3  ansible --version
+    4  cd /etc/ansible
+    5  ls
+    6  cp ansible.cfg ansible.cfg.orig
+    7  sudo cp ansible.cfg ansible.cfg.orig
+    8  sudo cp hosts hosts.orig
+    9  ls
+   10  sudo vi hosts
+   11  cd
+   12  ansible all --list-hosts
+   13  cat /etc/ansible/hosts
+   14  vi /etc/ansible/hosts
+   15  sudo vi /etc/ansible/hosts
+   16  ansible all --list-hosts
+   17  cat /etc/ansible/hosts
+   18  ansible ubuntu --list-hosts
+   19  ansible centos --list-hosts
+   20  ansible ubuntu:centos ---list-hosts
+   21  ansible ubuntu:centos --list-hosts
+   22  ansible all --list-hosts
+   23  cat /etc/ansible/hosts
+   24  sudo vi /etc/ansible/hosts
+   25  ansible node-4 --list-hosts
+   26  sudo vi /etc/ansible/hosts
+   27  ansible app-server --list-hosts
+   28  ping 172.31.93.182
+   29  cat /etc/ansible/hosts
+   30  ansible all -m ping -k
+   31  ssh devops@172.31.93.182
+   32  ansible all -m ping -k
+   33  sudo vi /etc/ansible/ansible.cfg
+   34  ansible all -m ping -k
+   35  sudo vi /etc/ansible/ansible.cfg
+   36  ansible all -m ping -k
+   37  sudo vi /etc/ansible/ansible.cfg
+   38  ansible all -m ping -k
+   39  export ANSIBLE_HOST_KEY_CHECKING=False
+   40  ansible all -m ping -k
+   41  sudo vi /etc/ansible/ansible.cfg
+   42  ls
+   43  ls -a
+   44  cd .ssh
+   45  ls
+   46  cd ..
+   47  ls
+   48  ls -a
+   49  ssh-keygen
+   50  ls -a
+   51  cd .ssh
+   52  ls
+   53  cd
+   54  ssh-copy-id devops@172.31.93.182
+   55  ls -a
+   56  cd .ssh
+   57  ls
+   58  cat id_rsa.pub
+   59  cd
+   60  ssh devops@172.31.93.182
+   61  ssh-copy-id devops@172.31.85.104
+   62  ssh 172.31.85.104
+   63  ssh-copy-id devops@172.31.85.102
+   64  ssh 172.31.85.102
+   65  ansible all -m ping
+
+
+devops@ansible-server:~/inventory$ ansible --version
+ansible 2.9.27
+  config file = /home/devops/inventory/ansible.cfg
+  configured module search path = [u'/home/devops/.ansible/plugins/modules', u'/usr/share/ansible/plugins/modules']
+  ansible python module location = /usr/lib/python2.7/dist-packages/ansible
+  executable location = /usr/bin/ansible
+  python version = 2.7.17 (default, Jul  1 2022, 15:56:32) [GCC 7.5.0]
+devops@ansible-server:~/inventory$
+devops@ansible-server:~/inventory$ ls
+ansible.cfg  myhosts
+devops@ansible-server:~/inventory$ ansible --version
+ansible 2.9.27
+  config file = /home/devops/inventory/ansible.cfg
+  configured module search path = [u'/home/devops/.ansible/plugins/modules', u'/usr/share/ansible/plugins/modules']
+  ansible python module location = /usr/lib/python2.7/dist-packages/ansible
+  executable location = /usr/bin/ansible
+  python version = 2.7.17 (default, Jul  1 2022, 15:56:32) [GCC 7.5.0]
+devops@ansible-server:~/inventory$ pwd
+/home/devops/inventory
+devops@ansible-server:~/inventory$ cd
+devops@ansible-server:~$
+devops@ansible-server:~$ ansible --version
+ansible 2.9.27
+  config file = /etc/ansible/ansible.cfg
+  configured module search path = [u'/home/devops/.ansible/plugins/modules', u'/usr/share/ansible/plugins/modules']
+  ansible python module location = /usr/lib/python2.7/dist-packages/ansible
+  executable location = /usr/bin/ansible
+  python version = 2.7.17 (default, Jul  1 2022, 15:56:32) [GCC 7.5.0]
+devops@ansible-server:~$ export ANSIBLE_CONFIG=/home/devops/inventory/ansible.cfg
+devops@ansible-server:~$ ansible --version
+ansible 2.9.27
+  config file = /home/devops/inventory/ansible.cfg
+  configured module search path = [u'/home/devops/.ansible/plugins/modules', u'/usr/share/ansible/plugins/modules']
+  ansible python module location = /usr/lib/python2.7/dist-packages/ansible
+  executable location = /usr/bin/ansible
+  python version = 2.7.17 (default, Jul  1 2022, 15:56:32) [GCC 7.5.0]
+devops@ansible-server:~$ cd inventory/
+devops@ansible-server:~/inventory$ ansible --version
+ansible 2.9.27
+  config file = /home/devops/inventory/ansible.cfg
+  configured module search path = [u'/home/devops/.ansible/plugins/modules', u'/usr/share/ansible/plugins/modules']
+  ansible python module location = /usr/lib/python2.7/dist-packages/ansible
+  executable location = /usr/bin/ansible
+  python version = 2.7.17 (default, Jul  1 2022, 15:56:32) [GCC 7.5.0]
+
+
+Ansible supports a lots of modules ..
+
+A Module is smallest unit of execution  in Ansible 
+
+ansible all -m ping
+
+command 
+raw
+copy
+fetch
+package
+yum
+yum_repository
+apt
+service
+user
+group 
+lineinfile - sed , awk - perl 
+file
+shell
+
+
+
+sudo apt install apache2 -y  --> Ubuntu --> Debian Distribution
+
+sudo yum install httpd -y ---> Redhat/Centos/Amazon Linux ---> RPM Distribution 
+
+if the changes already there and you are trying to apply the same change ,Ansible will not apply and it will return error status.this we call it as 
+idempotence
+
+
+
+YAML /JSON ---> data format ,data exchanger
+
+syntax YAML representation 
+
+Playbook files
+
+--------------------------------------------
+Ansible Day-3 session:
+
+package: it is generic module which is used to install the packages in any distribution, Ubuntu ,Centos or Redhat
+
+state: present (Install the package)
+ntpupdate - 2.0 , 2.4
+state: latest
+
+
+
+yum_repository:
+
+root@ansible-server:~# ansible centos -m yum_repository -a 'name=yum_server description="my first yum server" file=my_yum_server baseurl=https://download.fedoraproject.org/pub/epel/$releasever/$basearch/ gpgcheck=no enabled=yes'
+172.31.85.102 | CHANGED => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python"
+    },
+    "changed": true,
+    "repo": "yum_server",
+    "state": "present"
+}
+
+
+root@ansible-server:~# ansible centos -m yum_repository -a 'name=yum_server description="my first yum server" file=my_yum_server state=absent'
+172.31.85.102 | CHANGED => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python"
+    },
+    "changed": true,
+    "repo": "yum_server",
+    "state": "absent"
+}
+
+
+Ansible Key Components:
+
+Inventory - /etc/ansible/hosts Static inventory 
+list of all nodes to which ansible control server to connect
+
+Module: - ansible all -m <modulename>
+ Atomic unit of automation in Ansible, we specify our desired state in ansible using modules
+
+Task: Task in ansible will consist of modules
+
+play: will consists of mulitple tasks
+
+playbook - will consists of one or more play's
+
+In Ansible we express the playbook in the form of __YAML__ files
+
+Playbook 
+1. single line format
+2. multi line format
+3. dictationary format
+
+
+dry-run ---
+terraform plan
+
+
+terraform apply
+
+
+import_tasks
+include_tasks
+
+
+
+write a playbook file to install node js in ubuntu 18.04
+
+apache2
+
+website templates
+
+
+cd /var/www/html
+
+8080
+
+
+
+Tomorrow topics
+
+Variable
+Ansible facts
+conditions
+loops
+ansible vault
+tags
+rescue,block ,always
+
+how to install the LAMP in ubuntu /centos
+
+how to install tomcat9 in ubuntu /centos
+------------------------------------------------------------------------
+Ansible Day-4 Session
+
+Variables
+Loops
+Conditional statement
+
+Variables - "{{ variablename }}"
+
+---
+playbook1
+
+
+---
+playbook2
+
+
+Ansible Facts 
+
+Ansible Loops
+
+Ansible conditonal
+
+
+Ansible loops:
+
+with_items - deprecated and now it is replaced with loop
+
+simple loop
+nested loop
+
+hash loop
+
+Ansible conditonal
+Ansinle notifer and handlers
+Ansible tags
+Ansible ignore_errors
+Ansible rescue group always
+Ansible vault
+
+How to write playbook for  installing LAMP
+How to write playbook for installing tomcat9 on ubuntu 
+Ansible roles - 30 mins 
+Ansible Galaxy
+mysql postgresql - 15 mins 
+
+Ansible towers -- GUI --- 
+
+AWX - same as Ansible tower
+
+terraform - Ansible
+Ansible - docker
+ansible - kubernetes
+
+Ansible - creates resource AWS
+Ansible - create resources Azure
+
+Network - 
+
+
+
+
+
+
+
