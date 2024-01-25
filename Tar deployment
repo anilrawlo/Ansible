@@ -1,1 +1,41 @@
 
+
+
+---
+- name: Backup and Maintenance Playbook
+  hosts: localhost
+  become: true
+
+  tasks:
+    - name: Backup /anil folders
+      ansible.builtin.command: cmd="cp -r /anil/* /anil_backup/"
+    
+    - name: Backup /nitin/abc folder
+      ansible.builtin.command: cmd="cp -r /nitin/abc /nitin/abc_backup"
+    
+    - name: Remove folders inside /nitin
+      ansible.builtin.command: cmd="rm -r /nitin/*"
+    
+    - name: Copy and extract tar file in /nitin
+      ansible.builtin.copy:
+        src: /path/to/your/file.tar
+        dest: /nitin/
+      ansible.builtin.command: cmd="tar -xf /nitin/file.tar -C /nitin/"
+    
+    - name: Copy property file from /nitin/abc_backup to /nitin/abc
+      ansible.builtin.copy:
+        src: /nitin/abc_backup/property_file
+        dest: /nitin/abc/
+    
+    - name: Run script in /nitin/abc
+      ansible.builtin.command: cmd="sh /nitin/abc/script.sh"
+    
+    - name: Copy files from backup folders
+      ansible.builtin.copy:
+        src: "/anil_backup/"
+        dest: "/anil/"
+    
+    - name: Copy files from /nitin/abc_backup to /nitin/abc
+      ansible.builtin.copy:
+        src: "/nitin/abc_backup/"
+        dest: "/nitin/abc/"
